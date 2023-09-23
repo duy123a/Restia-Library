@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Restia.Common.Logger
 {
+	/// <summary>
+	/// Base logger
+	/// </summary>
 	public abstract class BaseLogger
 	{
 		/// <summary>Log type constant: Wild card</summary>
@@ -34,7 +37,7 @@ namespace Restia.Common.Logger
 		/// <summary>
 		/// Update log output type setting list
 		/// </summary>
-		/// <param name="strLogOutputType">Log output type list</param>
+		/// <param name="strLogOutputTypeList">Log output type list</param>
 		public static void UpdateLogOutputType(string strLogOutputTypeList)
 		{
 			// Clear the old list
@@ -91,6 +94,8 @@ namespace Restia.Common.Logger
 						ex.Message,
 						Environment.NewLine,
 						ex.StackTrace));
+
+				ex = ex.InnerException;
 			}
 			return sbErrorMessage.ToString();
 		}

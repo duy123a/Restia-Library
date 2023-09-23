@@ -6,6 +6,6 @@
 	public class Constants
 	{
 		/// <summary>Physical directory path of log file</summary>
-		public static string PHYSICALDIRPATH_LOGFILE = "";
+		public static string PHYSICALDIRPATH_LOGFILE = string.Empty;
 	}
 }
