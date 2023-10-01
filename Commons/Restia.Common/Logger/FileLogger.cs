@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace Restia.Common.Logger
 {
@@ -64,7 +66,7 @@ namespace Restia.Common.Logger
 			bool monthly = false,
 			Encoding encoding = null)
 		{
-			// Check log type (need to update the log type list once before using)
+			// Check log type (* mean all OK)
 			if ((LOG_OUTPUT_TYPE_SETTING_LIST.Contains(BaseLogger.LOGTYPE_WILDCARD) == false)
 				&& (LOG_OUTPUT_TYPE_SETTING_LIST.Contains(strLogType) == false))
 			{
@@ -72,7 +74,48 @@ namespace Restia.Common.Logger
 			}
 
 			// Determine log file path
+			var logFilePath = string.Format(
+				"{0}{1}_{2}.{3}",
+				directoryPath,
+				strLogType,
+				DateTime.Now.ToString(monthly ? "yyyyMM" : "yyyyMMdd"),
+				Constants.LOGFILE_EXTENSION);
 
+			encoding = encoding ?? Encoding.GetEncoding(Constants.LOGFILE_ENCODING);
+
+			// Write log
+			try
+			{
+				// Mutex controls
+				using (var mutex = new Mutex(false, logFilePath.Replace("\\", "_") + ".FileWrite"))
+				{
+					if (mutex.WaitOne(TimeSpan.Zero, false) == false)
+					{
+						return;
+					}
+
+					try
+					{
+						using (var sw = new StreamWriter(logFilePath, true, encoding))
+						{
+							var message = string.Format(
+								"[{0}] {1} {2}",
+								strLogType,
+								DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+								strMessage);
+							sw.WriteLine(message);
+						}
+					}
+					finally
+					{
+						mutex.ReleaseMutex();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
 		}
 	}
 }
