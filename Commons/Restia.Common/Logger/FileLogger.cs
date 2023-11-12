@@ -1,20 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
 
 namespace Restia.Common.Logger
 {
-	/// <summary>
-	/// File logger
-	/// </summary>
 	public partial class FileLogger : BaseLogger
 	{
-		/// <summary>
-		/// Constructor
-		/// </summary>
+		private static readonly IFileSystem _fileSystem;
+
 		static FileLogger()
 		{
+			_fileSystem = new FileSystem();
+
 			// Log directory name correction
 			if (Constants.PHYSICALDIRPATH_LOGFILE.EndsWith(@"\") == false)
 			{
@@ -30,19 +29,12 @@ namespace Restia.Common.Logger
 			}
 
 			// Check the directory exists or not
-			if (Directory.Exists(Constants.PHYSICALDIRPATH_LOGFILE) == false)
+			if (_fileSystem.Directory.Exists(Constants.PHYSICALDIRPATH_LOGFILE) == false)
 			{
-				Directory.CreateDirectory(Constants.PHYSICALDIRPATH_LOGFILE);
+				_fileSystem.Directory.CreateDirectory(Constants.PHYSICALDIRPATH_LOGFILE);
 			}
 		}
 
-		/// <summary>
-		/// Write the log
-		/// </summary>
-		/// <param name="strLogType">Log type</param>
-		/// <param name="strMessage">Message</param>
-		/// <param name="monthly">Is monthly write</param>
-		/// <param name="encoding">Encoding</param>
 		public static void Write(
 			string strLogType,
 			string strMessage,
@@ -51,14 +43,7 @@ namespace Restia.Common.Logger
 		{
 			Write(strLogType, strMessage, Constants.PHYSICALDIRPATH_LOGFILE, monthly, encoding);
 		}
-		/// <summary>
-		/// Write the log
-		/// </summary>
-		/// <param name="strLogType">Log type</param>
-		/// <param name="strMessage">Message</param>
-		/// <param name="directoryPath">Directory path</param>
-		/// <param name="monthly">Is monthly write</param>
-		/// <param name="encoding">Encoding</param>
+
 		public static void Write(
 			string strLogType,
 			string strMessage,
@@ -105,6 +90,10 @@ namespace Restia.Common.Logger
 								strMessage);
 							sw.WriteLine(message);
 						}
+					}
+					catch (Exception)
+					{
+						throw;
 					}
 					finally
 					{
