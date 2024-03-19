@@ -1,8 +1,10 @@
 ﻿using Restia.Common.Logger;
+using Restia.Common.Utils;
 using Restia.Playground.Commands;
 
 namespace Restia.Playground;
 
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 internal class Program
 {
 	[STAThread]
@@ -11,16 +13,16 @@ internal class Program
 		try
 		{
 			var program = new Program();
-			FileLogger.WriteInfo("起動");
+			FileLogger.WriteInfo("Starting");
 
 			// Excute program
-			var isSuccess = ProcessUtility.ExcecWithProcessMutex(program.Start);
+			var isSuccess = ProcessUtility.ExecWithProcessMutex(program.Start);
 			if (isSuccess == false)
 			{
-				throw new Exception("他プロセスが起動しているため、起動に失敗しました。二重起動は禁止されています。");
+				throw new Exception("Startup failed because another process was running. Double activation is prohibited.");
 			}
 
-			FileLogger.WriteInfo("正常終了");
+			FileLogger.WriteInfo("End normally");
 		}
 		catch (Exception ex)
 		{

@@ -1,20 +1,29 @@
-﻿namespace Restia.Playground.Utils;
+﻿using System.IO.Abstractions;
+
+namespace Restia.Playground.Utils;
 public class FileChecker
 {
-	public FileChecker()
+	private readonly IFileSystem _fileSystem;
+	public FileChecker() : this(fileSystem: new FileSystem())
+	{
+	}
+
+	public FileChecker(IFileSystem fileSystem)
 	{
 		this.LastExecuteFilePath = Path.Combine(
 			AppDomain.CurrentDomain.BaseDirectory,
 			Constants.TMP_DIRECTORY_NAME,
 			Constants.FILENAME_LASTEXEC);
+
+		_fileSystem = fileSystem;
 	}
 
 	public void UpdateLastExecuteFile(DateTime date)
 	{
 		// Delete old file
-		if (File.Exists(this.LastExecuteFilePath))
+		if (_fileSystem.File.Exists(this.LastExecuteFilePath))
 		{
-			File.Delete(this.LastExecuteFilePath);
+			_fileSystem.File.Delete(this.LastExecuteFilePath);
 		}
 
 		// Create new file
@@ -23,7 +32,7 @@ public class FileChecker
 		{
 			Directory.CreateDirectory(directoryPath);
 		}
-		File.WriteAllText(
+		_fileSystem.File.WriteAllText(
 			this.LastExecuteFilePath,
 			date.ToString(Constants.FILECONTENT_LASTEXEC_DATEFORMAT));
 	}
@@ -32,7 +41,7 @@ public class FileChecker
 	{
 		try
 		{
-			if (File.Exists(this.LastExecuteFilePath) == false) return null;
+			if (_fileSystem.File.Exists(this.LastExecuteFilePath) == false) return null;
 
 			var lastExecuteDateTimeString = File.ReadAllText(this.LastExecuteFilePath);
 			var lastExecuteDateTime = DateTime.ParseExact(
