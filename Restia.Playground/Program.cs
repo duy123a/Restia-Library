@@ -4,7 +4,6 @@ using Restia.Playground.Commands;
 
 namespace Restia.Playground;
 
-[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 internal class Program
 {
 	[STAThread]
@@ -13,7 +12,7 @@ internal class Program
 		try
 		{
 			var program = new Program();
-			FileLogger.WriteInfo("Starting");
+			FileLogger.WriteInfo("Starting batch");
 
 			// Excute program
 			var isSuccess = ProcessUtility.ExecWithProcessMutex(program.Start);
@@ -22,7 +21,7 @@ internal class Program
 				throw new Exception("Startup failed because another process was running. Double activation is prohibited.");
 			}
 
-			FileLogger.WriteInfo("End normally");
+			FileLogger.WriteInfo("End batch normally");
 		}
 		catch (Exception ex)
 		{

@@ -6,7 +6,7 @@ public abstract class CommandBase : ICommand
 {
 	public CommandBase()
 	{
-		this.ActionName = this.GetType().Name.Replace("Command", string.Empty);
+		this.ActionName = this.GetType().Name.Replace("Command", " Batch");
 	}
 
 	public void Execute()
@@ -56,11 +56,11 @@ public abstract class CommandBase : ICommand
 	private void WriteInfoLog()
 	{
 		var message = string.Format(
-			"{0} Time：{1}（Successful：{2}times、Failed：{3}times）",
-			(this.ActionName + " completion").PadRight(25, '　'),
+			"{0} Time：{1}（Successful：{2} times、Failed：{3} times）",
+			(this.ActionName + " completion.").PadRight(15, '　'),
 			this.EndDate - this.BeginDate,
-			this.SuccessCount.ToString().PadLeft(3, ' '),
-			this.ErrorCount.ToString().PadLeft(3, ' '));
+			this.SuccessCount.ToString().PadLeft(1, ' '),
+			this.ErrorCount.ToString().PadLeft(1, ' '));
 		FileLogger.WriteInfo(message);
 	}
 

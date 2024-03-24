@@ -17,6 +17,7 @@ public class SampleCommand : CommandBase
 			: this.BeginDate;
 
 		// Do somethings
+		Console.WriteLine("Forever Together");
 
 		// Update last execute date time file
 		this.FileChecker.UpdateLastExecuteFile(this.BeginDate);

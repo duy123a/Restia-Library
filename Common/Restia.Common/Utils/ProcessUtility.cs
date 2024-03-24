@@ -1,12 +1,9 @@
 ﻿using System.Reflection;
-using System.Security.AccessControl;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
 
 namespace Restia.Common.Utils;
 
-[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class ProcessUtility
 {
 	public static bool ExecWithProcessMutex(Action method)
@@ -27,14 +24,14 @@ public class ProcessUtility
 			{
 				try
 				{
-					// These mutex security code only work on Window platform
-					var mutexSecurity = new MutexSecurity();
-					mutexSecurity.AddAccessRule(
-						new MutexAccessRule(
-							new SecurityIdentifier(WellKnownSidType.WorldSid, null),
-							MutexRights.Synchronize | MutexRights.Modify,
-							AccessControlType.Allow));
-					mutex.SetAccessControl(mutexSecurity);
+					// These mutex security code only work on Window platform, allow all users can run it
+					//var mutexSecurity = new MutexSecurity();
+					//mutexSecurity.AddAccessRule(
+					//	new MutexAccessRule(
+					//		new SecurityIdentifier(WellKnownSidType.WorldSid, null),
+					//		MutexRights.Synchronize | MutexRights.Modify,
+					//		AccessControlType.Allow));
+					//mutex.SetAccessControl(mutexSecurity);
 
 					hasHandle = mutex.WaitOne(0, false);
 
@@ -66,13 +63,13 @@ public class ProcessUtility
 
 	public static string GenerateMutexName(string filePath, string postfix, bool global, bool lower)
 	{
-		// String to prepend to Mutex kernel object
+		// Add prefix string to Mutex kernel object
 		var PREFIX_MUTEX = "restia:";
 
-		// File path part generation
+		// File path generation
 		var filePathEscaped = string.Empty;
 
-		// Hash if over 200 characters
+		// Hash if origin file path over 200 characters
 		if (filePath.Length > 200)
 		{
 			// Lowercase if necessary -> Unicode(UTF-16LE) -> SHA256(uppercase)
@@ -81,7 +78,8 @@ public class ProcessUtility
 		}
 		else
 		{
-			// Lower case if necessary->backslash becomes forward slash
+			// Lower case if necessary -> backslash becomes forward slash
+			// Backslash is an escape character so we shoul better to change it
 			filePathEscaped = (lower
 				? filePath.Replace(@"\", "/").ToLower()
 				: filePath.Replace(@"\", "/"));
@@ -89,8 +87,8 @@ public class ProcessUtility
 
 		// Mutex name generation
 		return string.Format(@"{0}\{1}:{2}.{3}",
-			(global ? @"Global" : @"Local"),    // Kernel namespace Prefix
-			PREFIX_MUTEX,    // conflict prevention
+			(global ? @"Global" : @"Local"),    // Kernel namespace prefix
+			PREFIX_MUTEX,    // another prefix to prevent conflict
 			filePathEscaped,
 			postfix);
 	}
