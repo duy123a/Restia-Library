@@ -1,9 +1,10 @@
-﻿using Restia.Playground.Utils;
+﻿using Restia.Common.SeriLogger;
+using Restia.Playground.Utils;
 
 namespace Restia.Playground.Commands;
 public class SampleCommand : CommandBase
 {
-	public SampleCommand()
+	public SampleCommand(IFileLogger logger) : base(logger)
 	{
 		this.FileChecker = new FileChecker();
 	}

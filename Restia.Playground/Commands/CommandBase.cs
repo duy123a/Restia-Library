@@ -1,12 +1,14 @@
-﻿using Restia.Common.Logger;
+﻿using Restia.Common.SeriLogger;
 using System.Text;
 
 namespace Restia.Playground.Commands;
 public abstract class CommandBase : ICommand
 {
-	public CommandBase()
+	private readonly IFileLogger _logger;
+	public CommandBase(IFileLogger logger)
 	{
 		this.ActionName = this.GetType().Name.Replace("Command", " Batch");
+		_logger = logger;
 	}
 
 	public void Execute()
@@ -19,8 +21,7 @@ public abstract class CommandBase : ICommand
 		}
 		catch (Exception ex)
 		{
-			this.ErrorMessages.AppendLine(BaseLogger.CreateExceptionMessage(ex));
-			FileLogger.WriteError(ex);
+			_logger.WriteError(ex, string.Empty);
 
 			OnError();
 		}
@@ -61,7 +62,7 @@ public abstract class CommandBase : ICommand
 			this.EndDate - this.BeginDate,
 			this.SuccessCount.ToString().PadLeft(1, ' '),
 			this.ErrorCount.ToString().PadLeft(1, ' '));
-		FileLogger.WriteInfo(message);
+		_logger.WriteInfo(message);
 	}
 
 	protected DateTime BeginDate { get; set; }
