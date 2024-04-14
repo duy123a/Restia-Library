@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Restia.Common.Logger;
+namespace Restia.Common.LegacyLogger;
 
 public abstract class BaseLogger
 {
@@ -23,7 +23,7 @@ public abstract class BaseLogger
 			return;
 		}
 
-		foreach (string strLogType in strLogOutputTypeList.Trim().Split(','))
+		foreach (var strLogType in strLogOutputTypeList.Trim().Split(','))
 		{
 			AddLogOutputType(strLogType);
 		}

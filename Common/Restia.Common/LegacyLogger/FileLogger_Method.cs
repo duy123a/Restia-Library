@@ -1,4 +1,4 @@
-﻿namespace Restia.Common.Logger;
+﻿namespace Restia.Common.LegacyLogger;
 public partial class FileLogger
 {
 	public static void WriteDebug(Exception ex)

@@ -1,4 +1,4 @@
-﻿namespace Restia.Common.SeriLogger;
+﻿namespace Restia.Common.Logger;
 public interface IFileLogger : IDisposable
 {
 	/// <summary>

@@ -1,75 +1,144 @@
-﻿using System.IO.Abstractions;
-using System.Text;
+﻿using Serilog;
+using Serilog.Events;
 
 namespace Restia.Common.Logger;
-
-public partial class FileLogger : BaseLogger
+public class FileLogger : IFileLogger
 {
-	private static readonly IFileSystem _fileSystem;
-	private static readonly object _lockObj = new();
+	/// <summary>Logger instance</summary>
+	private static ILogger _logger = Serilog.Core.Logger.None;
 
-	static FileLogger()
+	/// <summary>Log directory path</summary>
+	private const string LOG_DIR_FILE_PATH = @"D:\Logs";
+	/// <summary>Log debug</summary>
+	private const string TYPE_LOG_DEBUG = @"debug_.log";
+	/// <summary>Log information</summary>
+	private const string TYPE_LOG_INFO = @"info_.log";
+	/// <summary>Log error</summary>
+	private const string TYPE_LOG_ERROR = @"error_.log";
+
+	/// <summary>File size limit bytes: 10 MB</summary>
+	private const long FILE_SIZE_LIMIT_BYTES = 10L * 1024 * 1024;
+	/// <summary>Rolling interval</summary>
+	private const RollingInterval ROLLING_INTERVAL = RollingInterval.Day;
+
+	/// <summary>
+	/// Constructor
+	/// </summary>
+	public FileLogger()
 	{
-		_fileSystem = new FileSystem();
-
-		lock (_lockObj)
-		{
-			string logDir = GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE;
-			if (logDir.EndsWith('\\') == false)
-			{
-				GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE = logDir + @"\";
-			}
-
-			if (_fileSystem.Directory.Exists(GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE) == false)
-			{
-				_fileSystem.Directory.CreateDirectory(GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE);
-			}
-		}
+		_logger = new LoggerConfiguration()
+			.MinimumLevel.Debug()
+			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug)
+				.WriteTo.File(
+					path: $@"{LOG_DIR_FILE_PATH}\{TYPE_LOG_DEBUG}",
+					rollingInterval: ROLLING_INTERVAL,
+					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
+					shared: true))
+			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Information)
+				.WriteTo.File(
+					path: $@"{LOG_DIR_FILE_PATH}\{TYPE_LOG_INFO}",
+					rollingInterval: ROLLING_INTERVAL,
+					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
+					shared: true))
+			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error)
+				.WriteTo.File(
+					path: $@"{LOG_DIR_FILE_PATH}\{TYPE_LOG_ERROR}",
+					rollingInterval: ROLLING_INTERVAL,
+					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
+					shared: true))
+			.WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Warning)
+			.CreateLogger();
 	}
 
-	public static void Write(string logType, string strMessage, bool monthly = false, Encoding? encoding = null)
+	/// <summary>
+	/// Write debug to log
+	/// </summary>
+	/// <param name="message">Message template describing the event.</param>
+	/// <example><code>
+	/// _logger.WriteDebug("Starting up at 2023/08/29 08:00:00.");
+	/// </code></example>
+	public void WriteDebug(string message) => WriteDebug(message, string.Empty);
+
+	/// <summary>
+	/// Write debug to log
+	/// </summary>
+	/// <param name="messageTemplate">Message template describing the event.</param>
+	/// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+	/// <example><code>
+	/// _logger.WriteDebug("Starting up at {StartedAt}.", DateTime.Now);
+	/// </code></example>
+	public void WriteDebug(string messageTemplate, params object[] propertyValues)
+		=> _logger.Debug(messageTemplate, propertyValues);
+
+	/// <summary>
+	/// Write informaion to log
+	/// </summary>
+	/// <param name="message">Message template describing the event.</param>
+	/// <example><code>
+	/// _logger.WriteInfo("Processed 2 records in 100ms.");
+	/// </code></example>
+	public void WriteInfo(string message) => WriteInfo(message, string.Empty);
+
+	/// <summary>
+	/// Write informaion to log
+	/// </summary>
+	/// <param name="messageTemplate">Message template describing the event.</param>
+	/// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+	/// <example><code>
+	/// _logger.WriteInfo("Processed {RecordCount} records in {TimeMS}.", records.Length, sw.ElapsedMilliseconds);
+	/// </code></example>
+	public void WriteInfo(string messageTemplate, params object[] propertyValues)
+		=> _logger.Information(messageTemplate, propertyValues);
+
+	/// <summary>
+	///  Write error to log
+	/// </summary>
+	/// <param name="message">Message template describing the event.</param>
+	/// <example><code>
+	/// _logger.WriteError("Failed 3 records.");
+	/// </code></example>
+	public void WriteError(string message) => WriteError(message, string.Empty);
+
+	/// <summary>
+	/// Write error to log
+	/// </summary>
+	/// <param name="messageTemplate">Message template describing the event.</param>
+	/// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+	/// <example><code>
+	/// _logger.WriteError("Failed {ErrorCount} records.", brokenRecords.Length);
+	/// </code></example>
+	public void WriteError(string messageTemplate, params object[] propertyValues)
+		=> WriteError(null, messageTemplate, propertyValues);
+
+	/// <summary>
+	/// Write error to log
+	/// </summary>
+	/// <param name="exception">Exception related to the event.</param>
+	/// <param name="message">Message template describing the event.</param>
+	/// <example><code>
+	/// _logger.WriteError(ex, "Failed 3 records.");
+	/// </code></example>
+	public void WriteError(Exception exception, string message) => WriteError(exception, message, string.Empty);
+
+	/// <summary>
+	/// Write error to log
+	/// </summary>
+	/// <param name="exception">Exception related to the event.</param>
+	/// <param name="messageTemplate">Message template describing the event.</param>
+	/// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+	/// <example><code>
+	/// _logger.WriteError(ex, "Failed {ErrorCount} records.", brokenRecords.Length);
+	/// </code></example>
+	public void WriteError(Exception? exception, string messageTemplate, params object[] propertyValues)
+		=> _logger.Error(exception, messageTemplate ?? exception?.Message ?? string.Empty, propertyValues);
+
+	/// <summary>
+	/// Dispose
+	/// </summary>
+	public void Dispose()
 	{
-		Write(logType, strMessage, GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE, monthly, encoding);
-	}
-
-	public static void Write(string logType, string strMessage, string directoryPath, bool monthly = false, Encoding? encoding = null)
-	{
-		if ((logOutputTypeSettingList.Contains(BaseLogger.LOGTYPE_WILDCARD) == false)
-			&& (logOutputTypeSettingList.Contains(logType) == false))
-		{
-			return;
-		}
-
-		var datePattern = monthly ? "yyyyMM" : "yyyyMMdd";
-		var logFilePath = _fileSystem.Path.Combine(
-			directoryPath,
-			$"{logType}_{DateTime.Now.ToString(datePattern)}.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}");
-
-		encoding ??= Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING);
-
-		var mutexName = $"FileLoggerMutex_{_fileSystem.Path.GetFileName(logFilePath)}";
-		using var mutex = new Mutex(false, mutexName);
-		if (!mutex.WaitOne(TimeSpan.Zero, false))
-		{
-			return;
-		}
-
-		try
-		{
-			var timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-			var message = $"[{logType}] {timestamp} {strMessage}";
-
-			if (!_fileSystem.Directory.Exists(directoryPath))
-			{
-				_fileSystem.Directory.CreateDirectory(directoryPath);
-			}
-
-			using var sw = new StreamWriter(logFilePath, true, encoding);
-			sw.WriteLine(message);
-		}
-		finally
-		{
-			mutex.ReleaseMutex();
-		}
+		var logger = Interlocked.Exchange(ref _logger, Serilog.Core.Logger.None);
+		(logger as IDisposable)?.Dispose();
+		GC.SuppressFinalize(this);
 	}
 }

@@ -79,7 +79,7 @@ public class ProcessUtility
 		else
 		{
 			// Lower case if necessary -> backslash becomes forward slash
-			// Backslash is an escape character so we shoul better to change it
+			// Backslash is an escape character so we should change it to something else
 			filePathEscaped = (lower
 				? filePath.Replace(@"\", "/").ToLower()
 				: filePath.Replace(@"\", "/"));
@@ -88,7 +88,7 @@ public class ProcessUtility
 		// Mutex name generation
 		return string.Format(@"{0}\{1}:{2}.{3}",
 			(global ? @"Global" : @"Local"),    // Kernel namespace prefix
-			PREFIX_MUTEX,    // another prefix to prevent conflict
+			PREFIX_MUTEX,    // Another prefix to prevent conflict
 			filePathEscaped,
 			postfix);
 	}

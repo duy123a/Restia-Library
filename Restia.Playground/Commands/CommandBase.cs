@@ -1,4 +1,4 @@
-﻿using Restia.Common.SeriLogger;
+﻿using Restia.Common.Logger;
 using System.Text;
 
 namespace Restia.Playground.Commands;
