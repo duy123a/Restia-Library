@@ -14,22 +14,22 @@ public partial class FileLogger : BaseLogger
 
 		lock (_lockObj)
 		{
-			string logDir = GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE;
+			string logDir = GlobalConfiguration.Logger.LOG_DIR_FILE_PATH;
 			if (logDir.EndsWith('\\') == false)
 			{
-				GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE = logDir + @"\";
+				GlobalConfiguration.Logger.LOG_DIR_FILE_PATH = logDir + @"\";
 			}
 
-			if (_fileSystem.Directory.Exists(GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE) == false)
+			if (_fileSystem.Directory.Exists(GlobalConfiguration.Logger.LOG_DIR_FILE_PATH) == false)
 			{
-				_fileSystem.Directory.CreateDirectory(GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE);
+				_fileSystem.Directory.CreateDirectory(GlobalConfiguration.Logger.LOG_DIR_FILE_PATH);
 			}
 		}
 	}
 
 	public static void Write(string logType, string strMessage, bool monthly = false, Encoding? encoding = null)
 	{
-		Write(logType, strMessage, GlobalConfiguration.Logger.PHYSICALDIRPATH_LOGFILE, monthly, encoding);
+		Write(logType, strMessage, GlobalConfiguration.Logger.LOG_DIR_FILE_PATH, monthly, encoding);
 	}
 
 	public static void Write(string logType, string strMessage, string directoryPath, bool monthly = false, Encoding? encoding = null)

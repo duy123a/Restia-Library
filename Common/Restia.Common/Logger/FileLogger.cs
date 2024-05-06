@@ -7,14 +7,12 @@ public class FileLogger : IFileLogger
 	/// <summary>Logger instance</summary>
 	private static ILogger _logger = Serilog.Core.Logger.None;
 
-	/// <summary>Log directory path</summary>
-	private const string LOG_DIR_FILE_PATH = @"D:\Logs";
 	/// <summary>Log debug</summary>
-	private const string TYPE_LOG_DEBUG = @"debug_.log";
+	private string TYPE_LOG_DEBUG = $"debug_.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}";
 	/// <summary>Log information</summary>
-	private const string TYPE_LOG_INFO = @"info_.log";
+	private string TYPE_LOG_INFO = $"info_.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}";
 	/// <summary>Log error</summary>
-	private const string TYPE_LOG_ERROR = @"error_.log";
+	private string TYPE_LOG_ERROR = $"error_.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}";
 
 	/// <summary>File size limit bytes: 10 MB</summary>
 	private const long FILE_SIZE_LIMIT_BYTES = 10L * 1024 * 1024;
@@ -30,19 +28,19 @@ public class FileLogger : IFileLogger
 			.MinimumLevel.Debug()
 			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug)
 				.WriteTo.File(
-					path: $@"{LOG_DIR_FILE_PATH}\{TYPE_LOG_DEBUG}",
+					path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_DEBUG}",
 					rollingInterval: ROLLING_INTERVAL,
 					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
 					shared: true))
 			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Information)
 				.WriteTo.File(
-					path: $@"{LOG_DIR_FILE_PATH}\{TYPE_LOG_INFO}",
+					path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_INFO}",
 					rollingInterval: ROLLING_INTERVAL,
 					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
 					shared: true))
 			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error)
 				.WriteTo.File(
-					path: $@"{LOG_DIR_FILE_PATH}\{TYPE_LOG_ERROR}",
+					path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_ERROR}",
 					rollingInterval: ROLLING_INTERVAL,
 					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
 					shared: true))
