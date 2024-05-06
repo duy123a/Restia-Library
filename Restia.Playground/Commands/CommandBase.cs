@@ -57,8 +57,8 @@ public abstract class CommandBase : ICommand
 	private void WriteInfoLog()
 	{
 		var message = string.Format(
-			"{0} Time：{1}（Successful：{2} times、Failed：{3} times）",
-			(this.ActionName + " completion.").PadRight(15, '　'),
+			"{0} Time: {1} (Successful: {2} times, Failed: {3} times)",
+			(this.ActionName + " completion.").PadRight(15, ' '),
 			this.EndDate - this.BeginDate,
 			this.SuccessCount.ToString().PadLeft(1, ' '),
 			this.ErrorCount.ToString().PadLeft(1, ' '));
