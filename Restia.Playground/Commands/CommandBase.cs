@@ -4,7 +4,7 @@ using System.Text;
 namespace Restia.Playground.Commands;
 public abstract class CommandBase : ICommand
 {
-	private readonly IFileLogger _logger;
+	protected readonly IFileLogger _logger;
 	public CommandBase(IFileLogger logger)
 	{
 		this.ActionName = this.GetType().Name.Replace("Command", " Batch");

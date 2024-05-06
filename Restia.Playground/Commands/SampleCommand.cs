@@ -19,6 +19,7 @@ public class SampleCommand : CommandBase
 
 		// Do somethings
 		Console.WriteLine("Forever Together");
+		_logger.WriteInfo("This is a {test} message", "test123a");
 
 		// Update last execute date time file
 		this.FileChecker.UpdateLastExecuteFile(this.BeginDate);
