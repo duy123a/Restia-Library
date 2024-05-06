@@ -4,7 +4,7 @@ using System;
 using System.Text;
 using System.Threading;
 
-namespace Restia.Common.Logger
+namespace Restia.Common.Logger.SerilogLogger
 {
 	public class FileLogger : IFileLogger
 	{
@@ -144,7 +144,6 @@ namespace Restia.Common.Logger
 		{
 			var logger = Interlocked.Exchange(ref _logger, Serilog.Core.Logger.None);
 			(logger as IDisposable)?.Dispose();
-			GC.SuppressFinalize(this);
 		}
 	}
 }

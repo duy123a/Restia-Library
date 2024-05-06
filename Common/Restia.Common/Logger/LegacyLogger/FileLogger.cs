@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Restia.Common.Logger;
+using Restia.Common.Logger.LegacyLogger;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Text;
@@ -6,12 +8,13 @@ using System.Threading;
 
 namespace Restia.Common.LegacyLogger
 {
-	public partial class FileLogger : BaseLogger
+	public partial class FileLogger : BaseLogger, IFileLogger
 	{
-		private static readonly IFileSystem _fileSystem;
-		private static readonly object _lockObj = new object();
+		private readonly IFileSystem _fileSystem;
+		private readonly object _lockObj = new object();
+		private bool _disposed = false;
 
-		static FileLogger()
+		public FileLogger()
 		{
 			_fileSystem = new FileSystem();
 
@@ -30,12 +33,12 @@ namespace Restia.Common.LegacyLogger
 			}
 		}
 
-		public static void Write(string logType, string strMessage, bool monthly = false, Encoding? encoding = null)
+		public void Write(string logType, string strMessage, bool monthly = false, Encoding? encoding = null)
 		{
 			Write(logType, strMessage, GlobalConfiguration.Logger.LOG_DIR_FILE_PATH, monthly, encoding);
 		}
 
-		public static void Write(string logType, string strMessage, string directoryPath, bool monthly = false, Encoding? encoding = null)
+		public void Write(string logType, string strMessage, string directoryPath, bool monthly = false, Encoding? encoding = null)
 		{
 			if ((logOutputTypeSettingList.Contains(BaseLogger.LOGTYPE_WILDCARD) == false)
 				&& (logOutputTypeSettingList.Contains(logType) == false))
@@ -74,6 +77,30 @@ namespace Restia.Common.LegacyLogger
 			{
 				mutex.ReleaseMutex();
 			}
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed)
+				return;
+
+			if (disposing)
+			{
+				// TODO: dispose managed state (managed objects)
+			}
+
+			_disposed = true;
+		}
+
+		~FileLogger()
+		{
+			Dispose(false);
 		}
 	}
 }

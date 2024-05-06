@@ -1,4 +1,5 @@
 ﻿using Restia.Common.Logger;
+using Restia.Common.Logger.SerilogLogger;
 using Restia.Common.Utils;
 using Restia.Playground.Commands;
 
