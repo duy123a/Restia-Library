@@ -1,56 +1,59 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Restia.Common.LegacyLogger;
-
-public abstract class BaseLogger
+namespace Restia.Common.LegacyLogger
 {
-	public const string LOGTYPE_WILDCARD = "*";
-	public const string LOGTYPE_DEBUG = "debug";
-	public const string LOGTYPE_INFO = "info";
-	public const string LOGTYPE_WARN = "warn";
-	public const string LOGTYPE_ERROR = "error";
-	public const string LOGTYPE_FATAL = "fatal";
-
-	protected static List<string> logOutputTypeSettingList = [LOGTYPE_WILDCARD];
-
-	public static void UpdateLogOutputType(string strLogOutputTypeList)
+	public abstract class BaseLogger
 	{
-		logOutputTypeSettingList.Clear();
+		public const string LOGTYPE_WILDCARD = "*";
+		public const string LOGTYPE_DEBUG = "debug";
+		public const string LOGTYPE_INFO = "info";
+		public const string LOGTYPE_WARN = "warn";
+		public const string LOGTYPE_ERROR = "error";
+		public const string LOGTYPE_FATAL = "fatal";
 
-		if (strLogOutputTypeList.Trim().Contains(LOGTYPE_WILDCARD))
+		protected static List<string> logOutputTypeSettingList = new List<string> { LOGTYPE_WILDCARD };
+
+		public static void UpdateLogOutputType(string strLogOutputTypeList)
 		{
-			logOutputTypeSettingList.Add(LOGTYPE_WILDCARD);
-			return;
+			logOutputTypeSettingList.Clear();
+
+			if (strLogOutputTypeList.Trim().Contains(LOGTYPE_WILDCARD))
+			{
+				logOutputTypeSettingList.Add(LOGTYPE_WILDCARD);
+				return;
+			}
+
+			foreach (var strLogType in strLogOutputTypeList.Trim().Split(','))
+			{
+				AddLogOutputType(strLogType);
+			}
 		}
 
-		foreach (var strLogType in strLogOutputTypeList.Trim().Split(','))
+		private static void AddLogOutputType(string strLogOutputType)
 		{
-			AddLogOutputType(strLogType);
+			if (!string.IsNullOrWhiteSpace(strLogOutputType) && !logOutputTypeSettingList.Contains(strLogOutputType))
+			{
+				logOutputTypeSettingList.Add(strLogOutputType);
+			}
 		}
-	}
 
-	private static void AddLogOutputType(string strLogOutputType)
-	{
-		if (!string.IsNullOrWhiteSpace(strLogOutputType) && !logOutputTypeSettingList.Contains(strLogOutputType))
+		public static string CreateExceptionMessage(string strExceptionMessage, Exception ex)
 		{
-			logOutputTypeSettingList.Add(strLogOutputType);
+			return $"{strExceptionMessage}{Environment.NewLine}{CreateExceptionMessage(ex)}";
 		}
-	}
 
-	public static string CreateExceptionMessage(string strExceptionMessage, Exception ex)
-	{
-		return $"{strExceptionMessage}{Environment.NewLine}{CreateExceptionMessage(ex)}";
-	}
-
-	public static string CreateExceptionMessage(Exception? ex)
-	{
-		var sbErrorMessage = new StringBuilder();
-		while (ex != null)
+		public static string CreateExceptionMessage(Exception? ex)
 		{
-			sbErrorMessage.AppendLine($"-> {ex.Message}");
-			sbErrorMessage.AppendLine(ex.StackTrace);
-			ex = ex.InnerException;
+			var sbErrorMessage = new StringBuilder();
+			while (ex != null)
+			{
+				sbErrorMessage.AppendLine($"-> {ex.Message}");
+				sbErrorMessage.AppendLine(ex.StackTrace);
+				ex = ex.InnerException;
+			}
+			return sbErrorMessage.ToString();
 		}
-		return sbErrorMessage.ToString();
 	}
 }

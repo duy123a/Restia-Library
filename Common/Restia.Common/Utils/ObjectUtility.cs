@@ -1,19 +1,27 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
 
-namespace Restia.Common.Utils;
-public class ObjectUtility
+namespace Restia.Common.Utils
 {
-	public static T DeepCopy<T>(T source)
+	public class ObjectUtility
 	{
-		ArgumentNullException.ThrowIfNull(source);
-		using (var stream = new MemoryStream())
+		public static T DeepCopy<T>(T source)
 		{
-			var serializer = new XmlSerializer(typeof(T));
-			serializer.Serialize(stream, source);
-			stream.Position = 0;
+			if (source == null)
+			{
+				throw new ArgumentNullException(nameof(source));
+			}
 
-			var result = (T?)serializer.Deserialize(stream);
-			return result == null ? throw new InvalidOperationException("Deserialization returned null.") : result;
+			using (var stream = new MemoryStream())
+			{
+				var serializer = new XmlSerializer(typeof(T));
+				serializer.Serialize(stream, source);
+				stream.Position = 0;
+
+				var result = (T)serializer.Deserialize(stream);
+				return result == null ? throw new InvalidOperationException("Deserialization returned null.") : result;
+			}
 		}
 	}
 }
