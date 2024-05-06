@@ -24,15 +24,6 @@ public class ProcessUtility
 			{
 				try
 				{
-					// These mutex security code only work on Window platform, allow all users can run it
-					//var mutexSecurity = new MutexSecurity();
-					//mutexSecurity.AddAccessRule(
-					//	new MutexAccessRule(
-					//		new SecurityIdentifier(WellKnownSidType.WorldSid, null),
-					//		MutexRights.Synchronize | MutexRights.Modify,
-					//		AccessControlType.Allow));
-					//mutex.SetAccessControl(mutexSecurity);
-
 					hasHandle = mutex.WaitOne(0, false);
 
 					// If the handle could not be obtained
