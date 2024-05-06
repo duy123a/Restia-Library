@@ -31,7 +31,7 @@ public abstract class CommandBase : ICommand
 
 	protected virtual void OnStart()
 	{
-		this.BeginDate = DateTime.Now;
+		this.BeginDate = DateTimeOffset.Now;
 		this.SuccessCount = 0;
 		this.ErrorCount = 0;
 		this.ErrorMessages = new StringBuilder();
@@ -41,12 +41,12 @@ public abstract class CommandBase : ICommand
 
 	protected virtual void OnError()
 	{
-		this.EndDate = DateTime.Now;
+		this.EndDate = DateTimeOffset.Now;
 	}
 
 	protected virtual void OnComplete()
 	{
-		this.EndDate = DateTime.Now;
+		this.EndDate = DateTimeOffset.Now;
 	}
 
 	protected virtual void OnEnd()
@@ -65,8 +65,8 @@ public abstract class CommandBase : ICommand
 		_logger.WriteInfo(message);
 	}
 
-	protected DateTime BeginDate { get; set; }
-	protected DateTime EndDate { get; set; }
+	protected DateTimeOffset BeginDate { get; set; }
+	protected DateTimeOffset EndDate { get; set; }
 	protected string ActionName { get; set; } = string.Empty;
 	protected int SuccessCount { get; set; }
 	protected int ErrorCount { get; set; }

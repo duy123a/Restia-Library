@@ -10,15 +10,15 @@ public class FileChecker
 
 	public FileChecker(IFileSystem fileSystem)
 	{
-		this.LastExecuteFilePath = Path.Combine(
+		_fileSystem = fileSystem;
+
+		this.LastExecuteFilePath = _fileSystem.Path.Combine(
 			AppDomain.CurrentDomain.BaseDirectory,
 			Constants.TMP_DIRECTORY_NAME,
 			Constants.FILENAME_LASTEXEC);
-
-		_fileSystem = fileSystem;
 	}
 
-	public void UpdateLastExecuteFile(DateTime date)
+	public void UpdateLastExecuteFile(DateTimeOffset date)
 	{
 		// Delete old file
 		if (_fileSystem.File.Exists(this.LastExecuteFilePath))
@@ -27,24 +27,24 @@ public class FileChecker
 		}
 
 		// Create new file
-		var directoryPath = Path.GetDirectoryName(this.LastExecuteFilePath);
-		if (directoryPath != null && Directory.Exists(directoryPath) == false)
+		var directoryPath = _fileSystem.Path.GetDirectoryName(this.LastExecuteFilePath);
+		if (directoryPath != null && _fileSystem.Directory.Exists(directoryPath) == false)
 		{
-			Directory.CreateDirectory(directoryPath);
+			_fileSystem.Directory.CreateDirectory(directoryPath);
 		}
 		_fileSystem.File.WriteAllText(
 			this.LastExecuteFilePath,
 			date.ToString(Constants.FILECONTENT_LASTEXEC_DATEFORMAT));
 	}
 
-	public DateTime? GetLastExecuteDateTime()
+	public DateTimeOffset? GetLastExecuteDateTime()
 	{
 		try
 		{
 			if (_fileSystem.File.Exists(this.LastExecuteFilePath) == false) return null;
 
-			var lastExecuteDateTimeString = File.ReadAllText(this.LastExecuteFilePath);
-			var lastExecuteDateTime = DateTime.ParseExact(
+			var lastExecuteDateTimeString = _fileSystem.File.ReadAllText(this.LastExecuteFilePath);
+			var lastExecuteDateTime = DateTimeOffset.ParseExact(
 				lastExecuteDateTimeString.Trim(),
 				Constants.FILECONTENT_LASTEXEC_DATEFORMAT,
 				null);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restia.Common.Extensions;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Text;
@@ -10,7 +11,6 @@ namespace Restia.Common.Logger.LegacyLogger
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly object _lockObj = new object();
-		private bool _disposed = false;
 
 		public FileLogger()
 		{
@@ -60,7 +60,7 @@ namespace Restia.Common.Logger.LegacyLogger
 
 			try
 			{
-				var timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+				var timestamp = DateTimeOffset.Now.ToDateString();
 				var message = $"[{logType}] {timestamp} {strMessage}";
 
 				if (!_fileSystem.Directory.Exists(directoryPath))
@@ -75,30 +75,6 @@ namespace Restia.Common.Logger.LegacyLogger
 			{
 				mutex.ReleaseMutex();
 			}
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_disposed)
-				return;
-
-			if (disposing)
-			{
-				// TODO: dispose managed state (managed objects)
-			}
-
-			_disposed = true;
-		}
-
-		~FileLogger()
-		{
-			Dispose(false);
 		}
 	}
 }

@@ -14,6 +14,8 @@ namespace Restia.Common.Logger.LegacyLogger
 		public const string LOGTYPE_ERROR = "error";
 		public const string LOGTYPE_FATAL = "fatal";
 
+		private bool _disposed = false;
+
 		protected List<string> logOutputTypeSettingList = new List<string> { LOGTYPE_WILDCARD };
 
 		public void UpdateLogOutputType(string strLogOutputTypeList)
@@ -80,6 +82,30 @@ namespace Restia.Common.Logger.LegacyLogger
 			}
 
 			return messageTemplate;
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed)
+				return;
+
+			if (disposing)
+			{
+				// TODO: dispose managed state (managed objects)
+			}
+
+			_disposed = true;
+		}
+
+		~BaseLogger()
+		{
+			Dispose(false);
 		}
 	}
 }

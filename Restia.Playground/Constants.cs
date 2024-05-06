@@ -5,5 +5,5 @@ public class Constants
 
 	public const string FILENAME_LASTEXEC = "_LastExec";
 
-	public const string FILECONTENT_LASTEXEC_DATEFORMAT = "yyyyMMddHHmm";
+	public const string FILECONTENT_LASTEXEC_DATEFORMAT = "yyyy-MM-dd HH:mm:ss.fff zzz";
 }
