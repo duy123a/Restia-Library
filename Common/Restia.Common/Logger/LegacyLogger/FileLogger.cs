@@ -1,12 +1,10 @@
-﻿using Restia.Common.Logger;
-using Restia.Common.Logger.LegacyLogger;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
 
-namespace Restia.Common.LegacyLogger
+namespace Restia.Common.Logger.LegacyLogger
 {
 	public partial class FileLogger : BaseLogger, IFileLogger
 	{

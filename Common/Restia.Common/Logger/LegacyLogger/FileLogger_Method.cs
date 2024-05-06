@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restia.Common.LegacyLogger
+namespace Restia.Common.Logger.LegacyLogger
 {
 	public partial class FileLogger
 	{
