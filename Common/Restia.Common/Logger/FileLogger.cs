@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using Serilog.Events;
+using System.Text;
 
 namespace Restia.Common.Logger;
 public class FileLogger : IFileLogger
@@ -31,19 +32,22 @@ public class FileLogger : IFileLogger
 					path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_DEBUG}",
 					rollingInterval: ROLLING_INTERVAL,
 					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
-					shared: true))
+					shared: true,
+					encoding: Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING)))
 			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Information)
 				.WriteTo.File(
 					path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_INFO}",
 					rollingInterval: ROLLING_INTERVAL,
 					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
-					shared: true))
+					shared: true,
+					encoding: Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING)))
 			.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error)
 				.WriteTo.File(
 					path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_ERROR}",
 					rollingInterval: ROLLING_INTERVAL,
 					fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
-					shared: true))
+					shared: true,
+					encoding: Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING)))
 			.WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Warning)
 			.CreateLogger();
 	}
