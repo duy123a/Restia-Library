@@ -7,17 +7,17 @@ using System.Threading;
 
 namespace Restia.Common.Logger.SerilogLogger
 {
-	public class FileLogger : IFileLogger
+	public partial class FileLogger : IFileLogger
 	{
 		/// <summary>Logger instance</summary>
 		private static ILogger _logger = Serilog.Core.Logger.None;
 
 		/// <summary>Log debug</summary>
-		private string TYPE_LOG_DEBUG = $"debug_.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}";
+		private string TYPE_LOG_DEBUG = $"debug_.{RestiaConfiguration.Logger.LogFileExtension}";
 		/// <summary>Log information</summary>
-		private string TYPE_LOG_INFO = $"info_.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}";
+		private string TYPE_LOG_INFO = $"info_.{RestiaConfiguration.Logger.LogFileExtension}";
 		/// <summary>Log error</summary>
-		private string TYPE_LOG_ERROR = $"error_.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}";
+		private string TYPE_LOG_ERROR = $"error_.{RestiaConfiguration.Logger.LogFileExtension}";
 
 		/// <summary>File size limit bytes: 10 MB</summary>
 		private const long FILE_SIZE_LIMIT_BYTES = 10L * 1024 * 1024;
@@ -33,25 +33,25 @@ namespace Restia.Common.Logger.SerilogLogger
 				.MinimumLevel.Debug()
 				.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug)
 					.WriteTo.File(
-						path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_DEBUG}",
+						path: $@"{RestiaConfiguration.Logger.PhysicalRootPath}\{TYPE_LOG_DEBUG}",
 						rollingInterval: ROLLING_INTERVAL,
 						fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
 						shared: true,
-						encoding: Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING)))
+						encoding: Encoding.GetEncoding(RestiaConfiguration.Logger.LogFileEncoding)))
 				.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Information)
 					.WriteTo.File(
-						path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_INFO}",
+						path: $@"{RestiaConfiguration.Logger.PhysicalRootPath}\{TYPE_LOG_INFO}",
 						rollingInterval: ROLLING_INTERVAL,
 						fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
 						shared: true,
-						encoding: Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING)))
+						encoding: Encoding.GetEncoding(RestiaConfiguration.Logger.LogFileEncoding)))
 				.WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error)
 					.WriteTo.File(
-						path: $@"{GlobalConfiguration.Logger.LOG_DIR_FILE_PATH}\{TYPE_LOG_ERROR}",
+						path: $@"{RestiaConfiguration.Logger.PhysicalRootPath}\{TYPE_LOG_ERROR}",
 						rollingInterval: ROLLING_INTERVAL,
 						fileSizeLimitBytes: FILE_SIZE_LIMIT_BYTES,
 						shared: true,
-						encoding: Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING)))
+						encoding: Encoding.GetEncoding(RestiaConfiguration.Logger.LogFileEncoding)))
 				.WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Warning)
 				.CreateLogger();
 		}

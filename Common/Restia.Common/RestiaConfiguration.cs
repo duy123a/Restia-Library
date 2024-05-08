@@ -2,7 +2,7 @@
 
 namespace Restia.Common
 {
-	public static class GlobalConfiguration
+	public sealed class RestiaConfiguration
 	{
 		public static LoggerConfiguration Logger { get; set; } = new LoggerConfiguration();
 	}

@@ -51,7 +51,7 @@ public class SampleCommand : CommandBase
 
 	private void FindLoggingFilePath()
 	{
-		var loggingFilePath = StringUtility.ToEmpty(GlobalConfiguration.Logger.GetPropertyValue("LOG_DIR_FILE_PATH"));
+		var loggingFilePath = StringUtility.ToEmpty(RestiaConfiguration.Logger.GetPropertyValue("LOG_DIR_FILE_PATH"));
 		Console.WriteLine("This is current logging file path: {0}", loggingFilePath);
 		_logger.WriteInfo("This is current logging file path: {0}", loggingFilePath);
 	}

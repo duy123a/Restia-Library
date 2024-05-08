@@ -19,22 +19,22 @@ namespace Restia.Common.Logger.LegacyLogger
 
 			lock (_lockObj)
 			{
-				string logDir = GlobalConfiguration.Logger.LOG_DIR_FILE_PATH;
+				string logDir = RestiaConfiguration.Logger.PhysicalRootPath;
 				if (logDir.EndsWith('\\') == false)
 				{
-					GlobalConfiguration.Logger.LOG_DIR_FILE_PATH = logDir + @"\";
+					RestiaConfiguration.Logger.PhysicalRootPath = logDir + @"\";
 				}
 
-				if (_fileSystem.Directory.Exists(GlobalConfiguration.Logger.LOG_DIR_FILE_PATH) == false)
+				if (_fileSystem.Directory.Exists(RestiaConfiguration.Logger.PhysicalRootPath) == false)
 				{
-					_fileSystem.Directory.CreateDirectory(GlobalConfiguration.Logger.LOG_DIR_FILE_PATH);
+					_fileSystem.Directory.CreateDirectory(RestiaConfiguration.Logger.PhysicalRootPath);
 				}
 			}
 		}
 
 		public void Write(string logType, string strMessage, bool monthly = false, Encoding? encoding = null)
 		{
-			Write(logType, strMessage, GlobalConfiguration.Logger.LOG_DIR_FILE_PATH, monthly, encoding);
+			Write(logType, strMessage, RestiaConfiguration.Logger.PhysicalRootPath, monthly, encoding);
 		}
 
 		public void Write(string logType, string strMessage, string directoryPath, bool monthly = false, Encoding? encoding = null)
@@ -48,9 +48,9 @@ namespace Restia.Common.Logger.LegacyLogger
 			var datePattern = monthly ? "yyyyMM" : "yyyyMMdd";
 			var logFilePath = _fileSystem.Path.Combine(
 				directoryPath,
-				$"{logType}_{DateTime.Now.ToString(datePattern)}.{GlobalConfiguration.Logger.LOGFILE_EXTENSION}");
+				$"{logType}_{DateTime.Now.ToString(datePattern)}.{RestiaConfiguration.Logger.LogFileExtension}");
 
-			encoding ??= Encoding.GetEncoding(GlobalConfiguration.Logger.LOGFILE_ENCODING);
+			encoding ??= Encoding.GetEncoding(RestiaConfiguration.Logger.LogFileEncoding);
 
 			var mutexName = $"FileLoggerMutex_{_fileSystem.Path.GetFileName(logFilePath)}";
 			using var mutex = new Mutex(false, mutexName);
