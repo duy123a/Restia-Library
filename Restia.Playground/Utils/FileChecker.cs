@@ -22,10 +22,7 @@ public class FileChecker
 	public void UpdateLastExecuteFile(DateTimeOffset date)
 	{
 		// Delete old file
-		if (_fileSystem.File.Exists(this.LastExecuteFilePath))
-		{
-			_fileSystem.File.Delete(this.LastExecuteFilePath);
-		}
+		_fileSystem.SafeDelete(this.LastExecuteFilePath);
 
 		// Create new file
 		var directoryPath = _fileSystem.Path.GetDirectoryName(this.LastExecuteFilePath);
