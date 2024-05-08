@@ -20,6 +20,29 @@ namespace Restia.Common.Extensions
 		public static void SetPropertyValue(this object obj, string name, object value) =>
 			GetProperty(obj.GetType(), name).SetValue(obj, value);
 
+		public static TAttribute? GetCustomAttribute<TAttribute>(this object obj)
+			where TAttribute : Attribute
+		{
+			var type = obj.GetType();
+			var attributeType = typeof(TAttribute);
+			var key = (type, attributeType);
+
+			if (!_attributeCache.TryGetValue(key, out var attribute))
+			{
+				attribute = (TAttribute?)type.GetCustomAttributes(attributeType, false).FirstOrDefault();
+				if (attribute == null)
+				{
+					throw new NullReferenceException(
+						$"The object of type {type.Name} doesn't have attributed {nameof(TAttribute)}");
+				}
+
+				// Caching Attribute for quick lookup instead of using reflection each time.
+				_attributeCache.TryAdd(key, () => attribute);
+			}
+
+			return attribute as TAttribute;
+		}
+
 		private static PropertyInfo GetProperty(Type type, string name)
 		{
 			if (string.IsNullOrEmpty(name))
@@ -32,6 +55,12 @@ namespace Restia.Common.Extensions
 			{
 				properties = type.GetProperties().ToDictionary(p => p.Name, p => p);
 				_propertyCache.TryAdd(type, () => properties);
+			}
+
+			if (properties == null)
+			{
+				throw new Exception(
+					$"The object of type {type.Name} doesn't have any public properties");
 			}
 
 			if (!properties.TryGetValue(name, out var property))

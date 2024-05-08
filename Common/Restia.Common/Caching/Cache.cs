@@ -5,13 +5,14 @@ namespace Restia.Common.Caching
 {
 	public class Cache<TKey, TValue>
 		where TKey : notnull
+		where TValue : class
 	{
 		private readonly ConcurrentDictionary<TKey, Lazy<TValue>> _cache = new ConcurrentDictionary<TKey, Lazy<TValue>>();
 
 		public bool TryAdd(TKey key, Func<TValue> valueFactory) =>
 			_cache.TryAdd(key, new Lazy<TValue>(valueFactory));
 
-		public bool TryGetValue(TKey key, out TValue value)
+		public bool TryGetValue(TKey key, out TValue? value)
 		{
 			if (_cache.TryGetValue(key, out var lazyValue))
 			{
@@ -20,7 +21,7 @@ namespace Restia.Common.Caching
 			}
 			else
 			{
-				value = default!;
+				value = default;
 				return false;
 			}
 		}
