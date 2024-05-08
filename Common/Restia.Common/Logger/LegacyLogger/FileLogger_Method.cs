@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restia.Common.Utils;
+using System;
 
 namespace Restia.Common.Logger.LegacyLogger
 {
@@ -11,7 +12,7 @@ namespace Restia.Common.Logger.LegacyLogger
 
 		public void WriteDebug(string messageTemplate, params object[] propertyValues)
 		{
-			var replacedMessage = CreateReplaceMessage(messageTemplate, propertyValues);
+			var replacedMessage = StringUtility.CreateReplaceMessage(messageTemplate, propertyValues);
 			Write(LOGTYPE_DEBUG, replacedMessage);
 		}
 
@@ -22,7 +23,7 @@ namespace Restia.Common.Logger.LegacyLogger
 
 		public void WriteInfo(string messageTemplate, params object[] propertyValues)
 		{
-			var replacedMessage = CreateReplaceMessage(messageTemplate, propertyValues);
+			var replacedMessage = StringUtility.CreateReplaceMessage(messageTemplate, propertyValues);
 			Write(LOGTYPE_INFO, replacedMessage);
 		}
 
@@ -33,7 +34,7 @@ namespace Restia.Common.Logger.LegacyLogger
 
 		public void WriteError(string messageTemplate, params object[] propertyValues)
 		{
-			var replacedMessage = CreateReplaceMessage(messageTemplate, propertyValues);
+			var replacedMessage = StringUtility.CreateReplaceMessage(messageTemplate, propertyValues);
 			Write(LOGTYPE_ERROR, replacedMessage);
 		}
 
@@ -44,7 +45,7 @@ namespace Restia.Common.Logger.LegacyLogger
 
 		public void WriteError(Exception exception, string messageTemplate, params object[] propertyValues)
 		{
-			var replacedMessage = CreateReplaceMessage(messageTemplate, propertyValues);
+			var replacedMessage = StringUtility.CreateReplaceMessage(messageTemplate, propertyValues);
 			Write(LOGTYPE_ERROR, replacedMessage, exception);
 		}
 

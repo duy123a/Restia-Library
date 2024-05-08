@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using Restia.Common.Extensions;
+using System.IO.Abstractions;
 
 namespace Restia.Playground.Utils;
 public class FileChecker
@@ -34,7 +35,7 @@ public class FileChecker
 		}
 		_fileSystem.File.WriteAllText(
 			this.LastExecuteFilePath,
-			date.ToString(Constants.FILECONTENT_LASTEXEC_DATEFORMAT));
+			date.ToDateString());
 	}
 
 	public DateTimeOffset? GetLastExecuteDateTime()
@@ -46,7 +47,7 @@ public class FileChecker
 			var lastExecuteDateTimeString = _fileSystem.File.ReadAllText(this.LastExecuteFilePath);
 			var lastExecuteDateTime = DateTimeOffset.ParseExact(
 				lastExecuteDateTimeString.Trim(),
-				Constants.FILECONTENT_LASTEXEC_DATEFORMAT,
+				DateTimeOffsetExtension.FILECONTENT_LASTEXEC_DATEFORMAT,
 				null);
 			return lastExecuteDateTime;
 		}

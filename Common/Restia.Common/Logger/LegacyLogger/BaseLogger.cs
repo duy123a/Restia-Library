@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Restia.Common.Logger.LegacyLogger
 {
@@ -57,31 +56,6 @@ namespace Restia.Common.Logger.LegacyLogger
 				ex = ex.InnerException;
 			}
 			return sbErrorMessage.ToString();
-		}
-
-		public string CreateReplaceMessage(string messageTemplate, params object[] propertyValues)
-		{
-			if (propertyValues.Length == 0)
-			{
-				return messageTemplate;
-			}
-
-			var regex = new Regex(@"\{([^{}]+)\}");
-			var matches = regex.Matches(messageTemplate);
-
-			if (matches.Count != propertyValues.Length)
-			{
-				throw new ArgumentException("The number of property values ​​does not match the number of substitutions in message template.");
-			}
-
-			for (int i = 0; i < matches.Count; i++)
-			{
-				var match = matches[i];
-				var propertyValue = propertyValues[i].ToString();
-				messageTemplate = messageTemplate.Replace(match.Value, propertyValue);
-			}
-
-			return messageTemplate;
 		}
 
 		public void Dispose()
