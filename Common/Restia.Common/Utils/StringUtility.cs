@@ -57,7 +57,8 @@ namespace Restia.Common.Utils
 
 		public static string AddSpacesBetweenUpperCharacter(string message)
 		{
-			string result = Regex.Replace(message, "(\\B[A-Z])", " $1");
+			var regex = new Regex("(\\B[A-Z])");
+			var result = regex.Replace(message, " $1");
 			return result.Trim();
 		}
 	}
