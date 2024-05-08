@@ -5,7 +5,7 @@ namespace Restia.Common.Utils
 {
 	public class StringUtility
 	{
-		public static string ToEmpty(object objSrc)
+		public static string ToEmpty(object? objSrc)
 		{
 			if ((objSrc == null) || (objSrc == DBNull.Value))
 			{
@@ -15,7 +15,7 @@ namespace Restia.Common.Utils
 			return objSrc.ToString() ?? string.Empty;
 		}
 
-		public static string? ToNull(object objSrc)
+		public static string? ToNull(object? objSrc)
 		{
 			return (ToEmpty(objSrc) == string.Empty) ? null : ToEmpty(objSrc);
 		}
