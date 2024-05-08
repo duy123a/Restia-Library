@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Restia.Common.Abstractions.Caching;
+using System;
 using System.Collections.Concurrent;
 
 namespace Restia.Common.Caching
 {
-	public class Cache<TKey, TValue>
+	public class Cache<TKey, TValue> : ICache<TKey, TValue>
 		where TKey : notnull
 		where TValue : class
 	{

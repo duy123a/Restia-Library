@@ -1,6 +1,6 @@
 ﻿using Restia.Common;
+using Restia.Common.Abstractions.Logger;
 using Restia.Common.Extensions;
-using Restia.Common.Logger;
 using Restia.Common.Utils;
 using Restia.Playground.Attribute;
 using Restia.Playground.Class;

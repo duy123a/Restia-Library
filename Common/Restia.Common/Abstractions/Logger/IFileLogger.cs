@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restia.Common.Logger
+namespace Restia.Common.Abstractions.Logger
 {
 	public interface IFileLogger : IDisposable
 	{
@@ -22,7 +22,6 @@ namespace Restia.Common.Logger
 		/// _logger.WriteDebug("Starting up at {StartedAt}.", DateTime.Now);
 		/// </code></example>
 		void WriteDebug(string messageTemplate, params object[] propertyValues);
-
 
 		/// <summary>
 		/// Write informaion to log

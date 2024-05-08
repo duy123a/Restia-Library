@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Restia.Common.Abstractions.Logger;
+using Serilog;
 using Serilog.Events;
 using System;
 using System.Text;

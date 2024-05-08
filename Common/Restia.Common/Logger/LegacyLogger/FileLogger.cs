@@ -1,4 +1,5 @@
-﻿using Restia.Common.Extensions;
+﻿using Restia.Common.Abstractions.Logger;
+using Restia.Common.Extensions;
 using System;
 using System.IO;
 using System.IO.Abstractions;
