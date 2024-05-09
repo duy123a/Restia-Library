@@ -1,7 +1,5 @@
-﻿using Restia.Common;
-using Restia.Common.Abstractions.Infrastructure.DI;
+﻿using Restia.Common.Abstractions.Infrastructure.DI;
 using Restia.Common.Abstractions.Logger;
-using Restia.Common.Configurations;
 using Restia.Common.Infrastructure.DI;
 using Restia.Common.Logger.SerilogLogger;
 using Restia.Common.Utils;
@@ -39,7 +37,7 @@ internal class Program
 	private Program()
 	{
 		// Set some config here
-		RestiaConfiguration.Logger = _configurationService.GetConfiguration<LoggerConfiguration>("FileLogging");
+		_configurationService.InitializeLibraryConfig();
 	}
 
 	private void Start()
