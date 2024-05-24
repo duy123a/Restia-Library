@@ -42,7 +42,7 @@ namespace Restia.Common.Utils
 
 			if (matches.Count != propertyValues.Length)
 			{
-				throw new ArgumentException("The number of property values ​​does not match the number of substitutions in message template.");
+				throw new ArgumentException("The number of property values does not match the number of substitutions in message template.");
 			}
 
 			for (int i = 0; i < matches.Count; i++)

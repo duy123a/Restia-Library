@@ -3,5 +3,7 @@
 	public interface IEnvironmentService
 	{
 		string EnvironmentName { get; set; }
+		string EncryptionSingleSignOnKey { get; set; }
+		string EncryptionSingleSignOnIV { get; set; }
 	}
 }
