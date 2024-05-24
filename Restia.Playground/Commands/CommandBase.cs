@@ -1,14 +1,17 @@
 ﻿using Restia.Common.Abstractions.Logger;
+using Restia.Common.Infrastructure.Security;
 using System.Text;
 
 namespace Restia.Playground.Commands;
 public abstract class CommandBase : ICommand
 {
 	protected readonly IFileLogger _logger;
-	public CommandBase(IFileLogger logger)
+	protected readonly ICryptographyService _cryptographyService;
+	public CommandBase(IFileLogger logger, ICryptographyService cryptographyService)
 	{
 		this.ActionName = this.GetType().Name.Replace("Command", " Batch");
 		_logger = logger;
+		_cryptographyService = cryptographyService;
 	}
 
 	public void Execute()

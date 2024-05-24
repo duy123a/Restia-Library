@@ -10,9 +10,9 @@ namespace Restia.Common.Infrastructure.DI
 			EnvironmentName = Environment.GetEnvironmentVariable("RESTIA_ENVIRONMENT")
 				?? "development";
 			EncryptionSingleSignOnKey = Environment.GetEnvironmentVariable("ENCRYPTION_SINGLE_SIGN_ON_KEY")
-				?? "cmVzdGlhLWNoYW4=";
+				?? "AAECAwQFBgcICQoLDA0ODw==";
 			EncryptionSingleSignOnIV = Environment.GetEnvironmentVariable("ENCRYPTION_SINGLE_SIGN_ON_IV")
-				?? "dG9nZXRoZXIgZm9ydmVy";
+				?? "UjJvchPnPof5w2P9e9ThzA==";
 		}
 
 		public string EnvironmentName { get; set; }
