@@ -21,23 +21,23 @@ namespace Restia.Common.Utils
 			using (Mutex mutex = new Mutex(false, mutexName, out _))
 			{
 				// Flag to check is it running yet
-				var hasHandle = false;
+				var hasSignal = false;
 				try
 				{
 					try
 					{
-						hasHandle = mutex.WaitOne(0, false);
+						hasSignal = mutex.WaitOne(0, false);
 
-						// If the handle could not be obtained
-						if (hasHandle == false) return false;
+						// If the signal could not be obtained, meaning it is already run
+						if (hasSignal == false) return false;
 					}
 					catch (AbandonedMutexException)
 					{
 						// Run here if the previous process terminated without releasing the Mutex handle.
-						// Even in this case, the handle itself has been acquired, so treat it as an acquisition.
+						// Even in this case, the signal itself has been acquired, so treat it as an acquisition.
 						// Reference: KERNEL32 -> WaitForSingleObjectEx
 						// https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobjectex?redirectedfrom=MSDN
-						hasHandle = true;
+						hasSignal = true;
 						Console.Error.WriteLine("Abandoned Mutex Exception");
 					}
 
@@ -48,8 +48,8 @@ namespace Restia.Common.Utils
 				}
 				finally
 				{
-					// Release mutex after using
-					if (hasHandle) mutex.ReleaseMutex();
+					// Release mutex if the signal has been obtained
+					if (hasSignal) mutex.ReleaseMutex();
 				}
 			}
 		}
