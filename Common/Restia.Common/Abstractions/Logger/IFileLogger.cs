@@ -21,7 +21,7 @@ namespace Restia.Common.Abstractions.Logger
 		/// <example><code>
 		/// _logger.WriteDebug("Starting up at {StartedAt}.", DateTime.Now);
 		/// </code></example>
-		void WriteDebug(string messageTemplate, params object[] propertyValues);
+		void WriteDebug(string messageTemplate, params object?[] propertyValues);
 
 		/// <summary>
 		/// Write informaion to log
@@ -40,7 +40,7 @@ namespace Restia.Common.Abstractions.Logger
 		/// <example><code>
 		/// _logger.WriteInfo("Processed {RecordCount} records in {TimeMS}.", records.Length, sw.ElapsedMilliseconds);
 		/// </code></example>
-		void WriteInfo(string messageTemplate, params object[] propertyValues);
+		void WriteInfo(string messageTemplate, params object?[] propertyValues);
 
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Restia.Common.Abstractions.Logger
 		/// <example><code>
 		/// _logger.WriteError("Failed {ErrorCount} records.", brokenRecords.Length);
 		/// </code></example>
-		void WriteError(string messageTemplate, params object[] propertyValues);
+		void WriteError(string messageTemplate, params object?[] propertyValues);
 
 		/// <summary>
 		/// Write error to log
@@ -81,6 +81,6 @@ namespace Restia.Common.Abstractions.Logger
 		/// <example><code>
 		/// _logger.WriteError(ex, "Failed {ErrorCount} records.", brokenRecords.Length);
 		/// </code></example>
-		void WriteError(Exception exception, string messageTemplate, params object[] propertyValues);
+		void WriteError(Exception exception, string messageTemplate, params object?[] propertyValues);
 	}
 }

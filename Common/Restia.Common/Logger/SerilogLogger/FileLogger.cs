@@ -73,7 +73,7 @@ namespace Restia.Common.Logger.SerilogLogger
 		/// <example><code>
 		/// _logger.WriteDebug("Starting up at {StartedAt}.", DateTime.Now);
 		/// </code></example>
-		public void WriteDebug(string messageTemplate, params object[] propertyValues)
+		public void WriteDebug(string messageTemplate, params object?[] propertyValues)
 			=> _logger.Debug(messageTemplate, propertyValues);
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Restia.Common.Logger.SerilogLogger
 		/// <example><code>
 		/// _logger.WriteInfo("Processed {RecordCount} records in {TimeMS}.", records.Length, sw.ElapsedMilliseconds);
 		/// </code></example>
-		public void WriteInfo(string messageTemplate, params object[] propertyValues)
+		public void WriteInfo(string messageTemplate, params object?[] propertyValues)
 			=> _logger.Information(messageTemplate, propertyValues);
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace Restia.Common.Logger.SerilogLogger
 		/// <example><code>
 		/// _logger.WriteError("Failed {ErrorCount} records.", brokenRecords.Length);
 		/// </code></example>
-		public void WriteError(string messageTemplate, params object[] propertyValues)
+		public void WriteError(string messageTemplate, params object?[] propertyValues)
 			=> WriteError(null, messageTemplate, propertyValues);
 
 		/// <summary>
@@ -135,7 +135,7 @@ namespace Restia.Common.Logger.SerilogLogger
 		/// <example><code>
 		/// _logger.WriteError(ex, "Failed {ErrorCount} records.", brokenRecords.Length);
 		/// </code></example>
-		public void WriteError(Exception? exception, string messageTemplate, params object[] propertyValues)
+		public void WriteError(Exception? exception, string messageTemplate, params object?[] propertyValues)
 			=> _logger.Error(exception, messageTemplate ?? exception?.Message ?? string.Empty, propertyValues);
 
 		/// <summary>

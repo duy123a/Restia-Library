@@ -68,6 +68,12 @@ public abstract class CommandBase : ICommand
 		_logger.WriteInfo(message);
 	}
 
+	protected void WriteResultLog(string message, params object?[] args)
+	{
+		Console.WriteLine(message, args);
+		_logger.WriteInfo(message, args);
+	}
+
 	protected DateTimeOffset BeginDate { get; set; }
 	protected DateTimeOffset EndDate { get; set; }
 	protected string ActionName { get; set; } = string.Empty;

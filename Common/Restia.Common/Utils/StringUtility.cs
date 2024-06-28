@@ -30,7 +30,7 @@ namespace Restia.Common.Utils
 		/// <example><code>
 		/// StringUtility.CreateReplaceMessage("Processed {RecordCount} records in {TimeMS}.", records.Length, sw.ElapsedMilliseconds);
 		/// </code></example>
-		public static string CreateReplaceMessage(string messageTemplate, params object[] propertyValues)
+		public static string CreateReplaceMessage(string messageTemplate, params object?[] propertyValues)
 		{
 			if (propertyValues.Length == 0)
 			{
@@ -60,6 +60,18 @@ namespace Restia.Common.Utils
 			var regex = new Regex("(\\B[A-Z])");
 			var result = regex.Replace(message, " $1");
 			return result.Trim();
+		}
+
+		public static string Base64Encode(string plainText)
+		{
+			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+			return System.Convert.ToBase64String(plainTextBytes);
+		}
+
+		public static string Base64Decode(string base64EncodedData)
+		{
+			var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+			return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
 		}
 	}
 }

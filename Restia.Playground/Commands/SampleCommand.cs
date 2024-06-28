@@ -31,7 +31,9 @@ public class SampleCommand : CommandBase
 			FindNameOfSampleAttribute,
 			GenerateRandomCryptoValue,
 			EncryptPassword,
-			DecryptPassword
+			DecryptPassword,
+			CreateBase64String,
+			DecryptBase64String
 		};
 
 		var commands = CommandHelper.InitializeCommand(actionList);
@@ -49,15 +51,13 @@ public class SampleCommand : CommandBase
 
 	private void HelloWorld()
 	{
-		Console.WriteLine("The end of the world at {0}, the new dawn at {1}", _lastExecuteDateTime.ToDateString(), this.BeginDate.ToDateString());
-		_logger.WriteInfo("The end of the world at {0}, the new dawn at {1}", _lastExecuteDateTime.ToDateString(), this.BeginDate.ToDateString());
+		WriteResultLog("The end of the world at {0}, the new dawn at {1}", _lastExecuteDateTime.ToDateString(), this.BeginDate.ToDateString());
 	}
 
 	private void FindLoggingFilePath()
 	{
 		var loggingFilePath = StringUtility.ToEmpty(RestiaConfiguration.Logger.GetPropertyValue("LOG_DIR_FILE_PATH"));
-		Console.WriteLine("This is current logging file path: {0}", loggingFilePath);
-		_logger.WriteInfo("This is current logging file path: {0}", loggingFilePath);
+		WriteResultLog("This is current logging file path: {0}", loggingFilePath);
 	}
 
 	private void FindNameOfSampleAttribute()
@@ -70,8 +70,7 @@ public class SampleCommand : CommandBase
 		}
 		else
 		{
-			Console.WriteLine("This is name of sample attribute: {0}", sampleAttribute.Name);
-			_logger.WriteInfo("This is name of sample attribute: {0}", sampleAttribute.Name);
+			WriteResultLog("This is name of sample attribute: {0}", sampleAttribute.Name);
 		}
 	}
 
@@ -93,15 +92,13 @@ public class SampleCommand : CommandBase
 
 		var encryptedPassword = _cryptographyService.Encrypt(password);
 
-		Console.WriteLine("This is your encrypted password: {0}", encryptedPassword);
-		_logger.WriteInfo("This is your encrypted password: {0}", encryptedPassword);
+		WriteResultLog("This is your encrypted password: {0}", encryptedPassword);
 	}
 
 	private void GenerateRandomCryptoValue()
 	{
 		var randomCryptoValue = _cryptographyService.GenerateRandomCryptoValue();
-		Console.WriteLine("This is your random crypto value: {0}", randomCryptoValue);
-		_logger.WriteInfo("This is your random crypto value: {0}", randomCryptoValue);
+		WriteResultLog("This is your random crypto value: {0}", randomCryptoValue);
 	}
 
 	private void DecryptPassword()
@@ -123,13 +120,28 @@ public class SampleCommand : CommandBase
 		try
 		{
 			var encryptedPassword = _cryptographyService.Decrypt(password);
-			Console.WriteLine("This is your decrypted password: {0}", encryptedPassword);
-			_logger.WriteInfo("This is your decrypted password: {0}", encryptedPassword);
+			WriteResultLog("This is your decrypted password: {0}", encryptedPassword);
 		}
 		catch (Exception)
 		{
 			return;
 		}
+	}
+
+	private void CreateBase64String()
+	{
+		Console.WriteLine("Enter your string you want to convert to base64");
+		var plainText = Console.ReadLine();
+		var result = StringUtility.Base64Encode(plainText!);
+		WriteResultLog("This is your base64 string: {0}", result);
+	}
+
+	private void DecryptBase64String()
+	{
+		Console.WriteLine("Enter your string you want to decrypt from base64");
+		var base64String = Console.ReadLine();
+		var result = StringUtility.Base64Decode(base64String!);
+		WriteResultLog("This is your decrypt string: {0}", result);
 	}
 
 	private FileChecker FileChecker { get; set; }
