@@ -33,7 +33,8 @@ public class SampleCommand : CommandBase
 			EncryptPassword,
 			DecryptPassword,
 			CreateBase64String,
-			DecryptBase64String
+			DecryptBase64String,
+			ResolvePath
 		};
 
 		var commands = CommandHelper.InitializeCommand(actionList);
@@ -142,6 +143,15 @@ public class SampleCommand : CommandBase
 		var base64String = Console.ReadLine();
 		var result = StringUtility.Base64Decode(base64String!);
 		WriteResultLog("This is your decrypt string: {0}", result);
+	}
+
+	private void ResolvePath()
+	{
+		Console.WriteLine("Enter your string you want to resolve");
+		Console.WriteLine("Example: /folder1/./folder2/../file.txt");
+		var path = Console.ReadLine();
+		var result = PathUtility.ResolvePath(path!);
+		WriteResultLog("This is your resolved path: {0}", result);
 	}
 
 	private FileChecker FileChecker { get; set; }
