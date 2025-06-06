@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36127.28 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restia.Common", "Restia.Common\Restia.Common.csproj", "{200652A4-0896-69F9-21B7-47C527B8B0CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restia.Playground", "Restia.Playground\Restia.Playground.csproj", "{34E93174-92EF-000F-7B05-0CB3A3431308}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{200652A4-0896-69F9-21B7-47C527B8B0CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200652A4-0896-69F9-21B7-47C527B8B0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200652A4-0896-69F9-21B7-47C527B8B0CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200652A4-0896-69F9-21B7-47C527B8B0CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E93174-92EF-000F-7B05-0CB3A3431308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E93174-92EF-000F-7B05-0CB3A3431308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E93174-92EF-000F-7B05-0CB3A3431308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E93174-92EF-000F-7B05-0CB3A3431308}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29742695-2C53-4CDB-8A28-CE7888981E31}
+	EndGlobalSection
+EndGlobal
