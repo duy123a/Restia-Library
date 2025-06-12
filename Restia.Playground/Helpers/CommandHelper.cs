@@ -1,4 +1,5 @@
 ﻿using Restia.Common.Utils;
+using System.Reflection;
 
 namespace Restia.Playground.Helpers
 {
@@ -8,11 +9,12 @@ namespace Restia.Playground.Helpers
         private const int InvalidCommandValue = -1;
 
         public static void RunCommandLoop(
-            List<(int CommandValue, string CommandTitle, Action Action)> commands,
+            object serviceLocator,
             ref int successCount,
             ref int errorCount)
         {
-            int commandValue = InvalidCommandValue;
+            var commands = InitializeCommand(serviceLocator);
+            var commandValue = InvalidCommandValue;
 
             while (true)
             {
@@ -26,7 +28,7 @@ namespace Restia.Playground.Helpers
                 Console.WriteLine("[0] End");
 
                 // Get command
-                int tempCommandValue = InvalidCommandValue;
+                var tempCommandValue = InvalidCommandValue;
                 string input;
 
                 do
@@ -86,8 +88,9 @@ namespace Restia.Playground.Helpers
             }
         }
 
-        public static List<(int CommandValue, string CommandTitle, Action Action)> InitializeCommand(params Action[] actionList)
+        private static List<(int CommandValue, string CommandTitle, Action Action)> InitializeCommand(object serviceLocator)
         {
+            var actionList = GetServiceLocatorActions(serviceLocator);
             int index = 1;
             var commands = new List<(int CommandValue, string CommandTitle, Action Action)>();
 
@@ -97,6 +100,16 @@ namespace Restia.Playground.Helpers
             }
 
             return commands;
+        }
+
+        private static Action[] GetServiceLocatorActions(object serviceLocator)
+        {
+            return serviceLocator.GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .Where(m => m.GetParameters().Length == 0 &&
+                            (m.ReturnType == typeof(void) || m.ReturnType == typeof(Task)))
+                .Select(m => (Action)Delegate.CreateDelegate(typeof(Action), serviceLocator, m))
+                .ToArray();
         }
     }
 }

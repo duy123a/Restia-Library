@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Restia.Playground.Helpers;
 using Restia.Playground.Methods;
 
 namespace Restia.Playground
@@ -9,6 +10,8 @@ namespace Restia.Playground
         private readonly ILogger _logger;
         private readonly DbContext _db;
         private readonly ServiceLocator _serviceLocator;
+        private int _successCount = 0;
+        private int _errorCount = 0;
 
         public App(
             ILogger<App> logger,
@@ -22,7 +25,8 @@ namespace Restia.Playground
 
         public async Task RunAsync()
         {
-            _serviceLocator.GenerateRsaKeyPair();
+            CommandHelper.RunCommandLoop(_serviceLocator, ref _successCount, ref _errorCount);
+
             await Task.CompletedTask;
         }
     }

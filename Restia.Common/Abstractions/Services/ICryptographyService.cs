@@ -7,5 +7,9 @@ namespace Restia.Common.Abstractions.Services
         (string privateKey, string publicKey) GenerateRsaKeyPair();
 
         string GenerateCodeChallenge(string codeVerifier);
+
+        string HashPassword(string password);
+
+        bool VerifyPassword(string password, string savedHash);
     }
 }
